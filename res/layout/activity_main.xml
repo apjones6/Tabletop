@@ -2,5 +2,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity" >
+    tools:context=".MainActivity">
+    
+    <aj.tabletop.BackgroundView android:id="@+id/back_layer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+    
+    <aj.tabletop.DrawView android:id="@+id/static_layer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <requestFocus />
+    </aj.tabletop.DrawView>
+    
 </RelativeLayout>

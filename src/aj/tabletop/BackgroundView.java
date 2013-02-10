@@ -10,15 +10,25 @@ import android.view.View;
 public class BackgroundView extends View
 {
 	private static final int GRID_SIZE = 50;
-	private final Paint paint = new Paint();
+	private final Paint mPaint = new Paint();
+
+	public BackgroundView(Context context)
+    {
+        super(context);
+        initialize();
+    }
 	
 	public BackgroundView(Context context, AttributeSet attrs)
     {
         super(context, attrs);
-        
-        paint.setColor(Color.GRAY);
-        setFocusable(false);
+        initialize();
     }
+	
+	private void initialize()
+	{
+		mPaint.setColor(Color.GRAY);
+        setFocusable(false);
+	}
 	
 	@Override
     public void onDraw(Canvas canvas)
@@ -28,12 +38,12 @@ public class BackgroundView extends View
 		
 		for (int i = 0; i < width; i += GRID_SIZE)
 		{
-			canvas.drawLine(i, 0, i, height, paint);
+			canvas.drawLine(i, 0, i, height, mPaint);
 		}
 		
 		for (int i = 0; i < height; i += GRID_SIZE)
 		{
-			canvas.drawLine(0, i, width, i, paint);
+			canvas.drawLine(0, i, width, i, mPaint);
 		}
     }
 }

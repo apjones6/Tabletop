@@ -17,7 +17,7 @@ Roadmap
 The progression outlined for this project is as follows:
 
  1. Drawing a map on a grid background
- 2. Eraser function
+ 2. ~~Eraser function~~
  3. Save/load maps
  4. Move drawn segments of a map (This may require some concept of grouping lines)
  5. Pen properties (Colour and Thickness, but 'snap to grid' would be good)

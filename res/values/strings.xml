@@ -3,5 +3,6 @@
 
     <string name="app_name">D20 Tabletop</string>
     <string name="menu_draw">Draw</string>
+    <string name="menu_erase">Erase</string>
 
 </resources>

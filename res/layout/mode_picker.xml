@@ -1,0 +1,16 @@
+<RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
+	<RadioButton android:id="@+id/btn_draw"
+	    android:layout_width="wrap_content"
+	    android:layout_height="match_parent"
+	    android:text="@string/menu_draw"/>
+	
+	<RadioButton android:id="@+id/btn_erase"
+	    android:layout_width="wrap_content"
+	    android:layout_height="match_parent"
+	    android:text="@string/menu_erase"/>
+
+</RadioGroup>

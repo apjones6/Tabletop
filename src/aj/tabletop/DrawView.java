@@ -1,12 +1,13 @@
 package aj.tabletop;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -14,95 +15,124 @@ import android.view.View.OnTouchListener;
 
 public class DrawView extends View implements OnTouchListener
 {
-    private final ArrayList<List<Point>> lines = new ArrayList<List<Point>>();
     private final Paint paint = new Paint();
+    private final Path path = new Path();
+    private Bitmap bitmap;
+    private Canvas canvas;
+    private Mode mode;
     
-    private boolean drawable = true;
+    public DrawView(Context context)
+    {
+        super(context);
+        initialize();
+    }
 
     public DrawView(Context context, AttributeSet attrs)
     {
         super(context, attrs);
-        
-        setFocusable(true);
-        setFocusableInTouchMode(true);
-
-        this.setOnTouchListener(this);
-
-        paint.setColor(Color.BLACK);
-        paint.setStrokeWidth(5);
+        initialize();
+    }
+    
+    private void initialize()
+    {
         paint.setAntiAlias(true);
+        paint.setDither(true);
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeJoin(Paint.Join.ROUND);
+        paint.setStrokeCap(Paint.Cap.ROUND);
+        
+    	setFocusable(true);
+        setFocusableInTouchMode(true);
+        setMode(Mode.Draw);
     }
     
-    public boolean getDrawable()
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh)
     {
-    	return drawable;
+        super.onSizeChanged(w, h, oldw, oldh);
+        bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+        canvas = new Canvas(bitmap);
     }
     
-    public void setDrawable(boolean drawable)
+    public Mode getMode()
     {
-    	if (this.drawable != drawable)
+    	return mode;
+    }
+    
+    public void setMode(Mode mode)
+    {
+    	this.mode = mode;
+    	
+    	switch (mode)
     	{
-    		this.drawable = drawable;
-    		if (drawable)
-    		{
-    			this.setOnTouchListener(this);
-    		}
-    		else
-    		{
-    			this.setOnTouchListener(null);
-    		}
+    	case Draw:
+    		paint.setColor(Color.BLACK);
+    		paint.setXfermode(null);
+            paint.setStrokeWidth(5);
+			setOnTouchListener(this);
+			break;
+    		
+    	case Erase:
+    		paint.setColor(Color.TRANSPARENT);
+    		paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+            paint.setStrokeWidth(15);
+			setOnTouchListener(this);
+			break;
+			
+    	case None:
+			setOnTouchListener(null);
+			break;
     	}
     }
 
     @Override
     public void onDraw(Canvas canvas)
     {
-    	for (List<Point> line : lines)
-    	{
-    		Point point = line.get(0);
-    		for (int i = 1; i < line.size(); ++i)
-    		{
-    			final Point next = line.get(i);
-    			canvas.drawLine(point.x, point.y, next.x, next.y, paint);
-    			point = next;
-    		}
-    	}
+        canvas.drawBitmap(bitmap, 0, 0, paint);
+        canvas.drawPath(path, paint);
     }
 
+    @Override
     public boolean onTouch(View view, MotionEvent event)
     {
-    	List<Point> line;
+    	float x = event.getX();
+    	float y = event.getY();
+    	
     	switch (event.getAction())
     	{
 	    	case MotionEvent.ACTION_DOWN:
-	    		line = new ArrayList<Point>();
-	    		line.add(new Point(event.getX(), event.getY()));
-		        lines.add(line);
+	    		path.reset();
+	    		path.moveTo(x, y);
 		        invalidate();
+		        break;
 		        
 	    	case MotionEvent.ACTION_MOVE:
-	    		line = lines.get(lines.size() - 1);
-	    		line.add(new Point(event.getX(), event.getY()));
+	    		path.lineTo(x, y);
+	    		if (mode == Mode.Erase)
+	    		{
+	    			canvas.drawPath(path, paint);
+		    		path.reset();
+	    		}
+	    		
+	    		path.moveTo(x, y);
 	    		invalidate();
+		        break;
+	    		
+	    	case MotionEvent.ACTION_UP:
+	    		path.lineTo(x, y);
+	    		canvas.drawPath(path, paint);
+	    		path.reset();
+	    		invalidate();
+	    		break;
     	}
     	
         return true;
     }
 }
 
-class Point
+enum Mode
 {
-    final float x, y;
-    
-    public Point(float x, float y)
-    {
-    	this.x = x;
-    	this.y = y;
-    }
-
-    @Override
-    public String toString()
-    {
-        return x + ", " + y;
-    }
+	None,
+	Draw,
+	Erase
 }

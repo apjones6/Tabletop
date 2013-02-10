@@ -8,7 +8,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -17,6 +16,8 @@ public class DrawView extends View implements OnTouchListener
 {
     private final ArrayList<List<Point>> lines = new ArrayList<List<Point>>();
     private final Paint paint = new Paint();
+    
+    private boolean drawable = true;
 
     public DrawView(Context context, AttributeSet attrs)
     {
@@ -30,6 +31,27 @@ public class DrawView extends View implements OnTouchListener
         paint.setColor(Color.BLACK);
         paint.setStrokeWidth(5);
         paint.setAntiAlias(true);
+    }
+    
+    public boolean getDrawable()
+    {
+    	return drawable;
+    }
+    
+    public void setDrawable(boolean drawable)
+    {
+    	if (this.drawable != drawable)
+    	{
+    		this.drawable = drawable;
+    		if (drawable)
+    		{
+    			this.setOnTouchListener(this);
+    		}
+    		else
+    		{
+    			this.setOnTouchListener(null);
+    		}
+    	}
     }
 
     @Override
@@ -50,9 +72,6 @@ public class DrawView extends View implements OnTouchListener
     public boolean onTouch(View view, MotionEvent event)
     {
     	List<Point> line;
-    	
-    	Log.i("aj.tabletop.DrawView", new Point(event.getX(), event.getY()).toString());
-    	
     	switch (event.getAction())
     	{
 	    	case MotionEvent.ACTION_DOWN:

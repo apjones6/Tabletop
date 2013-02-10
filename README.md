@@ -16,11 +16,12 @@ Roadmap
 
 The progression outlined for this project is as follows:
 
- 1. Drawing a map on a grid background
+ 1. ~~Drawing a map on a grid background~~
  2. ~~Eraser function~~
+ 3. Swipe/Pinch to make use of more map estate
  3. Save/load maps
- 4. Move drawn segments of a map (This may require some concept of grouping lines)
- 5. Pen properties (Colour and Thickness, but 'snap to grid' would be good)
+ 4. Pen properties (Colour and Thickness, but 'snap to grid' would be good)
+ 5. Move drawn segments of a map (This may require some concept of grouping lines)
  6. Rotate segments (Scale if feasible)
  7. Layering - Static scenery, Mobile scenery, Creatures (May be dropped)
 

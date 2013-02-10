@@ -95,8 +95,8 @@ public class DrawView extends View implements OnTouchListener
     @Override
     public boolean onTouch(View view, MotionEvent event)
     {
-    	float x = event.getX();
-    	float y = event.getY();
+    	final float x = event.getX();
+    	final float y = event.getY();
     	
     	switch (event.getAction())
     	{

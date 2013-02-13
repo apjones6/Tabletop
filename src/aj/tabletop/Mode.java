@@ -2,7 +2,7 @@ package aj.tabletop;
 
 public enum Mode
 {
-	None,
-	Draw,
-	Erase
+	NONE,
+	DRAW,
+	ERASE
 }

@@ -33,11 +33,11 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
 		switch (checkedId)
 		{
 		case R.id.btn_draw:
-			drawView.setMode(Mode.Draw);
+			drawView.setMode(Mode.DRAW);
 			break;
 
 		case R.id.btn_erase:
-			drawView.setMode(Mode.Erase);
+			drawView.setMode(Mode.ERASE);
 			break;
 		}
 	}

@@ -17,9 +17,10 @@ public class DrawView extends View implements OnTouchListener
 {
     private final Paint mPaint = new Paint();
     private final Path mPath = new Path();
+    
+    private Mode mMode = Mode.NONE;
     private Bitmap mBitmap;
     private Canvas mCanvas;
-    private Mode mMode;
     
     public DrawView(Context context)
     {
@@ -43,7 +44,7 @@ public class DrawView extends View implements OnTouchListener
         
     	setFocusable(true);
         setFocusableInTouchMode(true);
-        setMode(Mode.Draw);
+        setMode(Mode.DRAW);
     }
     
     @Override
@@ -61,25 +62,26 @@ public class DrawView extends View implements OnTouchListener
     
     public void setMode(Mode mode)
     {
-    	this.mMode = mode;
-    	
+    	if (mMode == mode) return;
+    		
+    	mMode = mode;
     	switch (mode)
     	{
-    	case Draw:
+    	case DRAW:
     		mPaint.setColor(Color.BLACK);
     		mPaint.setXfermode(null);
             mPaint.setStrokeWidth(5);
 			setOnTouchListener(this);
 			break;
     		
-    	case Erase:
+    	case ERASE:
     		mPaint.setColor(Color.TRANSPARENT);
     		mPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
             mPaint.setStrokeWidth(15);
 			setOnTouchListener(this);
 			break;
 			
-    	case None:
+    	case NONE:
 			setOnTouchListener(null);
 			break;
     	}
@@ -108,7 +110,7 @@ public class DrawView extends View implements OnTouchListener
 	        
     	case MotionEvent.ACTION_MOVE:
     		mPath.lineTo(x, y);
-    		if (mMode == Mode.Erase)
+    		if (mMode == Mode.ERASE)
     		{
     			mCanvas.drawPath(mPath, mPaint);
 	    		mPath.reset();
